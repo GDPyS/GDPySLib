@@ -13,3 +13,7 @@ class RegistrationResponse(IntEnum):
     PASSWORD_TOO_SHORT = -8
     USERNAME_TOO_SHORT = -9
     EMAILS_UNMATCHED = -99
+
+    def __str__(self) -> str:
+        """str dundermethod for easy response returning"""
+        return str(self.value)
