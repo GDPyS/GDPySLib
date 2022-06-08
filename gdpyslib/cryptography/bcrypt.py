@@ -3,7 +3,7 @@ import asyncio
 import bcrypt
 
 
-def hash_bcrypt(password: str) -> str:
+def __hash_bcrypt(password: str) -> str:
     """Hashes a password using the bcrypt algorithm with a random salt, returning
     the resulting hash.
     Args:
@@ -14,7 +14,19 @@ def hash_bcrypt(password: str) -> str:
     return bcrypt.hashpw(password.encode(), bcrypt.gensalt(12)).decode()
 
 
-def compare_bcrypt(password: str, hash: str) -> bool:
+async def hash_bcrypt(password: str) -> str:
+    """Hashes a password using the bcrypt algorithm with a random salt, returning
+    the resulting hash.
+    Args:
+        password (str): The password to be hashed.
+    Returns:
+        str: The hashed password."""
+
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(None, __hash_bcrypt, password)
+
+
+def __compare_bcrypt(password: str, hash: str) -> bool:
     """Compares a password to a hash using the bcrypt algorithm. If the check
     fails due to an incorrect hash format, False will still be returned.
     Args:
@@ -29,7 +41,7 @@ def compare_bcrypt(password: str, hash: str) -> bool:
         return False
 
 
-async def compare_bcrypt_async(password: str, hash: str) -> bool:
+async def compare_bcrypt(password: str, hash: str) -> bool:
     """Compares a password to a hash using the bcrypt algorithm. This check is ran
     within a loop executor to prevent blocking the main thread for extended quantities of time.
     If the check fails due to an incorrect hash format, False will still be returned.
@@ -40,4 +52,4 @@ async def compare_bcrypt_async(password: str, hash: str) -> bool:
         bool: Whether or not the password matches the hash."""
 
     loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(None, compare_bcrypt, password, hash)
+    return await loop.run_in_executor(None, __compare_bcrypt, password, hash)
