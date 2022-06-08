@@ -13,5 +13,5 @@ class Connection:
     async def disconnect(self) -> None:
         ...
 
-    def __getattribute__(self, __name: str) -> Any:
-        return self.client.__getattribute__(__name)
+    def __getattr__(self, __name: str) -> Any:
+        return self.client.__getattr__(__name)
