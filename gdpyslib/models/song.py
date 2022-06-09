@@ -9,7 +9,7 @@ class Song:
     name: str
     author_id: int
     author_name: int
-    size: int # In MB
+    size: float # In MB
     disabled: bool
     song_url: str
 

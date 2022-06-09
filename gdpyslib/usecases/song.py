@@ -3,6 +3,8 @@ from typing import Optional
 
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from gdpyslib.models.song import Song
+from gdpyslib.usecases import web
+from gdpyslib.constants import secrets
 
 async def from_db(song_id: int, mongo: AsyncIOMotorDatabase) -> Optional[Song]:
     """Attempts to fetch a `Song` with the given `song_id` from the database."""
@@ -16,8 +18,28 @@ async def from_db(song_id: int, mongo: AsyncIOMotorDatabase) -> Optional[Song]:
 async def from_gd(song_id: int) -> Optional[Song]:
     """Fetches the song data from the official Geometry Dash servers (over HTTP)."""
 
-    # TODO: Just establishing the naming conventions.
-    ...
+    # Using the Geometry Dash servers themselves as they have access to a private
+    # Newgrounds API.
+    resp = await web.post_boomlings("getGJSongInfo.php", {
+        "secret": secrets.DEFAULT,
+        "songID": song_id,
+    })
+
+    # Check if it is not an error message.
+    if "~|~" not in resp:
+        return None
+    
+    parsed_resp = web.parse_gd_dict(resp, "~|~")
+
+    return Song(
+        id=int(parsed_resp[1]),
+        name=parsed_resp[2],
+        author_id=int(parsed_resp[3]),
+        author_name=parsed_resp[4],
+        size=float(parsed_resp[5]),
+        song_url=parsed_resp[10],
+        disabled=False,
+    )
 
 async def insert(song: Song, mongo: AsyncIOMotorDatabase) -> None:
     """Inserts the song model `song` into the database."""
