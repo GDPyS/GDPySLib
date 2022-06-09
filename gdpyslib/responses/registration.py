@@ -1,6 +1,6 @@
 from enum import IntEnum
 
-from gdpyslib.mixins.enum_casts import StringCastMixin
+from gdpyslib.mixins.enum import StringCastMixin
 
 
 class RegistrationResponse(IntEnum, StringCastMixin):

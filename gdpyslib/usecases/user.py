@@ -24,7 +24,7 @@ def _parse_kwargs(
     return None
 
 
-async def fetch_user(**kwargs) -> Optional[User]:
+async def from_db(**kwargs) -> Optional[User]:
     """Fetches a GDPyS user from the database via name or ID"""
     mongo: AsyncIOMotorDatabase = kwargs["mongo"]
     if not (kwarg := _parse_kwargs(kwargs)):
@@ -38,7 +38,7 @@ async def fetch_user(**kwargs) -> Optional[User]:
     return User.from_row(row)
 
 
-async def register_user(
+async def register(
     name: str,
     email: str,
     password: str,
