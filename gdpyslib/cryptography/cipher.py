@@ -2,17 +2,41 @@ import base64
 from itertools import cycle
 
 
-def cipher_xor(text: str, key: str) -> str:
-    """Encrypts the string `text` using the XOR cipher with the key `key`.
+def cipher_xor(data: bytes, key: bytes) -> bytes:
+    """Encodes `data` using the XOR cipher with the key `key`.
     Args:
-        text (str): The text that is to be encrypted using the XOR cipher.
-        key (str): The key to be used within the encryption process.
+        data (bytes): The data that is to be encoded using the XOR cipher.
+        key (bytes): The key to be used within the encryption process.
     Returns:
-        An XOR encoded string of param `text` using the key `key`.
+        XOR encoded bytes.
+    """
+    return bytes(
+        byte ^ key_byte for byte, key_byte in zip(data, cycle(key))
+    )
+
+def cipher_xor_str(
+    data: str,
+    key: bytes,
+    encoding: str = "utf-8",
+    errors: str = "strict",
+) -> str:
+    """Encodes a given string in using XOR, taking into consideration the
+    string encoding itself.
+    
+    Args:
+        data (str): The data string to be encoded.
+        key (bytes): The XOR key to be used for the cipher.
+        encoding (str): The encoding to be used for the string and result.
+        errors (str): Specifies the error handling scheme for encoding errors.
+    
+    Returns:
+        An XOR encoded string.
     """
 
-    return "".join(chr(ord(x) ^ ord(y)) for (x, y) in zip(text, cycle(key)))
-
+    return cipher_xor(
+        data.encode(encoding, errors),
+        key,
+    ).decode(encoding, errors)
 
 def cipher_b64_encode(text: str) -> str:
     """Encodes the string `text` using the URL-safe Base64 algorithm.

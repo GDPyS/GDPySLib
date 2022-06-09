@@ -23,9 +23,8 @@ def parse_gd_dict(response: str, separator: str = ":") -> dict[int, str]:
 
     # Funky but only way I have found so far to use the same iterator twice
     # per iteration.
+    resp_iter = iter(response.split(separator))
     return {
         int(key): val
-        for key, val in zip(*[iter(
-            response.split(separator)
-        )] * 2)
+        for key, val in zip(resp_iter, resp_iter)
     }
