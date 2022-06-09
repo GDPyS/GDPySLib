@@ -1,7 +1,9 @@
 from enum import IntEnum
 
+from gdpyslib.mixins.enum_casts import StringCastMixin
 
-class RegistrationResponse(IntEnum):
+
+class RegistrationResponse(IntEnum, StringCastMixin):
     SUCCESS = 1
 
     USERNAME_TAKEN = -2
@@ -13,7 +15,3 @@ class RegistrationResponse(IntEnum):
     PASSWORD_TOO_SHORT = -8
     USERNAME_TOO_SHORT = -9
     EMAILS_UNMATCHED = -99
-
-    def __str__(self) -> str:
-        """str dundermethod for easy response returning"""
-        return str(self.value)

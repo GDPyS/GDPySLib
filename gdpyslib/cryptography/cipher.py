@@ -6,12 +6,12 @@ def cipher_xor(text: str, key: str) -> str:
     """Encrypts the string `text` using the XOR cipher with the key `key`.
     Args:
         text (str): The text that is to be encrypted using the XOR cipher.
-        key (int): The key to be used within the encryption process.
+        key (str): The key to be used within the encryption process.
     Returns:
         An XOR encoded string of param `text` using the key `key`.
     """
 
-    return "".join(chr(ord(x) ^ ord(y)) for (x, y) in zip(str(text), cycle(key)))
+    return "".join(chr(ord(x) ^ ord(y)) for (x, y) in zip(text, cycle(key)))
 
 
 def cipher_b64_encode(text: str) -> str:
