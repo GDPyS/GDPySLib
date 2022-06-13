@@ -45,3 +45,21 @@ async def insert(song: Song, mongo: AsyncIOMotorDatabase) -> None:
     """Inserts the song model `song` into the database."""
 
     await mongo.songs.insert_one(song.__dict__)
+
+async def ensure(song_id: int, mongo: AsyncIOMotorDatabase) -> Optional[Song]:
+    """Attempts to fetch the song from multiple sources, adding it to the
+    database if not located in a local source."""
+
+    song_db = await from_db(song_id, mongo)
+
+    if song_db:
+        return song_db
+    
+    # Crawling from GD servers.
+    song_gd = await from_gd(song_id)
+
+    if song_gd:
+        # Add it to the database for future access.
+        await insert(song_db, mongo)
+    
+    return song_gd
