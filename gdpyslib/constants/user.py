@@ -3,14 +3,18 @@ from enum import IntFlag
 
 
 class RequestStatus(IntFlag):
-    """Profile statuses on whether eg friend reqs are enabled."""
+    """Enums representing the publicity of certain profile elements."""
 
-    MESSAGES = 1 << 0
-    REQUESTS = 1 << 1
-    COMMENTS = 1 << 2
-    MESSAGES_FRIENDS_ONLY = 1 << 3
-    COMMENTS_FRIENDS_ONLY = 1 << 4
+    # Message State
+    MESSAGE_FRIENDS = 1 << 0
+    MESSAGE_PUBLIC = 1 << 1
 
+    # Friend State
+    FRIEND_PUBLIC = 1 << 2
+
+    # Comments
+    COMMENTS_FRIENDS = 1 << 3
+    COMMENTS_PUBLIC = 1 << 4
 
 class Privileges(IntFlag):
     """The GDPyS privileges."""
